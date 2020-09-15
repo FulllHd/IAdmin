@@ -36,15 +36,17 @@ class AdsController extends AdminController {
         $grid->column('description_any', __('i.description'));
         $grid->column('inactive', __('i.isActive?'))
             ->sortable()
-            ->display(function ($inactive) {
-                return $inactive ? __('i.no') : __('i.yes');
-            });
+            ->editable('select', [0 => __('i.yes'), 1 => __('i.no')]);
+            // ->display(function ($inactive) {
+            //     return $inactive ? __('i.no') : __('i.yes');
+            // });
 
         $grid->column('adm_check', __('i.isChecked?'))
             ->sortable()
-            ->display(function ($chacked) {
-                return $chacked ? __('i.yes') : __('i.no');
-            });
+            ->editable('select', [0 => __('i.no'), 1 => __('i.yes')]);
+            // ->display(function ($chacked) {
+            //     return $chacked ? __('i.yes') : __('i.no');
+            // });
 
         return $grid;
     }
@@ -54,23 +56,17 @@ class AdsController extends AdminController {
 
         $form->display('id', 'ID');
 
+        $form->select('inactive', __('i.isActive?'))->options([
+            0 => __('i.yes'),
+            1 => __('i.no')
+        ])->rules('required');
+        
+        $form->select('adm_check', __('i.isChecked?'))->options([
+            0 => __('i.no'),
+            1 => __('i.yes')
+        ])->rules('required');
 
-        $form->select('parent_id', __('i.parent_id'))->options(Categories::selectOptions());
-
-        $form->text('titleuk', __('i.titleLNG', ['UKR']))->rules('required');
-        $form->text('titleru', __('i.titleLNG', ['RU']))->rules('required');
-        $form->text('titleen', __('i.titleLNG', ['ENG']))->rules('required');
-        $form->text('titlepl', __('i.titleLNG', ['PL']))->rules('required');
-
-        $form->textarea('descruk', __('i.descriptionLNG', ['UKR']));
-        $form->textarea('descrru', __('i.descriptionLNG', ['RU']));
-        $form->textarea('descren', __('i.descriptionLNG', ['ENG']));
-        $form->textarea('descrpl', __('i.descriptionLNG', ['PL']));
-
-        $form->radio('type', __('i.type'))->options([
-            'second' => 'Second',
-            'main' => 'Main'
-        ])->default('second')->stacked();
+        // $form->select('parent_id', __('i.parent_id'))->options(Categories::selectOptions());
 
         return $form;
     }
